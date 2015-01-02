@@ -5,12 +5,101 @@ $(document).ready(function(){
 //and you’ll probably want to store your list of questions in an array.
 
 
-	var choice;
 	points = 0;
-	questionCounter = 1;
+	questionCounter = 0;
+	currentQuestionNumber = 0;
+	var choice;
 
 
-	//on clicking a .answers li, update addClass selected
+	questions = [
+		{
+		 number: 1,
+		 question: "1+1 =",
+		 correctAnswer: 2,
+		 answers: [
+		 	{
+		 		number: 1,
+		 		answer: "1"
+		 	},
+		 	{
+		 		number: 2,
+		 		answer: "2"
+		 	},
+		 	{
+		 		number: 3,
+		 		answer: "10"
+		 	}		 	
+		 ]
+		},
+
+		{
+		 number: 2,
+		 question: "5*2=",
+		 correctAnswer: 3,
+		 answers: [
+		 	{
+		 		number: 1,
+		 		answer: "213"
+		 	},
+		 	{
+		 		number: 2,
+		 		answer: "1234"
+		 	},
+		 	{
+		 		number: 3,
+		 		answer: "10"
+		 	}		 	
+		 ]
+		},
+		{
+		 number: 3,
+		 question: "you are",
+		 correctAnswer: 1,
+		 answers: [
+		 	{
+		 		number: 1,
+		 		answer: "awesome"
+		 	},
+		 	{
+		 		number: 2,
+		 		answer: "shitty"
+		 	},
+		 	{
+		 		number: 3,
+		 		answer: "boring"
+		 	}		 	
+		 ]
+		},
+		{
+		 number: 4,
+		 question: "the year is",
+		 correctAnswer: 4,
+		 answers: [
+		 	{
+		 		number: 1,
+		 		answer: "2012"
+		 	},
+		 	{
+		 		number: 2,
+		 		answer: "2013"
+		 	},
+		 	{
+		 		number: 3,
+		 		answer: "2014"
+		 	},
+		 	{
+		 		number: 4,
+		 		answer: "2015"
+		 	}		 			 
+		 ]
+		}								
+	];
+
+
+	$(".totalQuestions").text(questions.length);
+
+
+	//on clicking .answers li, update class and set choice var
 	$(".answers").on('click', 'li', function() {
 		$("li").removeClass("selected");
 		$(this).addClass("selected");
@@ -21,7 +110,7 @@ $(document).ready(function(){
 
 
 
-
+	//function to display the question and answers on the UI
 	function question(copy, answerCount, num, correctChoice, answers) {
 		this.copy = copy;
 		this.answerCount = answerCount;
@@ -34,85 +123,62 @@ $(document).ready(function(){
 			$(".question p").append(this.num + ": " + this.copy);
 			//clear previous answers
 			$("li").remove();
-			for(var i = 0; i <= this.num; i++) {
-				$(".answers ul").append("<li class='question" + this.num + " answer" + i + "'>" + this.answers[i] + "</li>");	
+			for(var i = 0; i < this.answerCount; i++) {
+				$(".answers ul").append("<li class='question" + this.num + " answer" + i + "'>" + questions[questionCounter].answers[i].answer + "</li>");	
 			};
 		}
 		this.listAnswers();
 	};
 
 
-
-
-	// for (questionCounter = 1; questionCounter < 3; questionCounter++) { };
-	var questions = 
-		{
-		 number: 1,
-		 question: "this is a question 1",
-		 correctAnswer: 2
-		 answers: [
-		 	{
-		 		number: 1,
-		 		answer: "q1answer1"
-		 	}
-		 	{
-		 		number: 2,
-		 		answer: "q1answer2"
-		 	}
-		 	{
-		 		number: 3,
-		 		answer: "q1answer3"
-		 	}		 	
-		 ]
+	//function to proceed to next question
+	function nextQuestion() {
+		if (questionCounter < questions.length) {
+		//create a new question object
+		currentQuestion = new question (
+		questions[questionCounter].question,
+		questions[questionCounter].answers.length,
+		questions[questionCounter].number,
+		questions[questionCounter].correctAnswer
+		);
+		//increment the question counter
+		questionCounter++;
+		//update the question counter on footer
+		$(".questionNum").text(questionCounter);
 		}
-		{
-		 number: 2,
-		 question: "this is a question 2",
-		 correctAnswer: 1
-		 answers: [
-		 	{
-		 		number: 1,
-		 		answer: "q2answer1"
-		 	}
-		 	{
-		 		number: 2,
-		 		answer: "q2answer2"
-		 	}
-		 	{
-		 		number: 3,
-		 		answer: "q2answer3"
-		 	}		 	
-		 ]
-		}		
+		//when there are no more questions show finished screen
+		else {
+			$(".finished").delay(800).show(400, function() {
+				$(".question, .answers").hide();
+			});
+		};
+	};
 
-		// question2 = new question("this is a qusetion #2", 3, 1, 1);
-		// question3 = new question("this is a qusetion #3", 3, 1, 0, ["3answer1", "3answer2", "3b"]);
-		
-		// question2Answers = ["answer1asdf", "answer2asdf", "basdf"];
-		// question3Answers = ["555", "444", "333"];
-
-
+	//initialize the first question
+	nextQuestion();
 
 	//submit users answer
 	$(".submit").on('click', function() {
 		
 		if (choice == undefined) {
 			$(".errorMessage").show("slow", function() {
-			$(this).delay(1000).hide("slow");
+				$(this).delay(1000).hide("slow");
 			});
 		}
-		else if (choice === question1.correctChoice) {
+		else if (choice === currentQuestion.correctChoice) {
 			points += 10;
-			$("p.points > span").text(points);
+			$(".points").text(points);
 			$(".correctMessage").show("slow", function() {
-			$(this).delay(1000).hide("slow");
-			questionCounter++;
-			$(".questionNum").text(questionCounter);
+				$(this).delay(1000).hide(900);
+				nextQuestion();
 			});
+
+
 		}
-		else if (choice != question1.correctChoice) {
+		else if (choice != currentQuestion.correctChoice) {
 			$(".incorrectMessage").show("slow", function() {
-			$(this).delay(1000).hide("slow");
+				$(this).delay(1000).hide(900);
+				nextQuestion();
 			});
 		};
 
@@ -120,10 +186,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-//on finishing show .finished (when questionCounter = 3)
 
 
 

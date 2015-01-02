@@ -86,8 +86,11 @@ p.errorMessage {
 }
 
 /* FINISHED SCREEN */
-.finished h3 {
+.finished {
 	display: none;
+}
+
+.finished h3 {
 	font-size: 2em;
 }
 
@@ -101,6 +104,6 @@ footer .questionNumber {
 	float:left;
 }
 
-footer .points {
+footer .scoreArea {
 	float:right;
 }
