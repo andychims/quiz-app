@@ -2,7 +2,6 @@
 // a new commit v1, master branch
 // a new commit v2, master branch
 // a new commit v3, master branchB
-// a new commit v4, master branchB
 
 $(document).ready(function(){
 
