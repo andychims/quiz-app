@@ -1,13 +1,7 @@
 
 // a new commit v1, master branch
 // a new commit v2, master branch
-<<<<<<< HEAD
-=======
 // a new commit v3, master branchB
-<<<<<<< HEAD
->>>>>>> parent of 7390b65... v4 branchB
-=======
->>>>>>> parent of 7390b65... v4 branchB
 
 $(document).ready(function(){
 
