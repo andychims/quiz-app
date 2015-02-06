@@ -135,21 +135,22 @@ $(document).ready(function(){
 	function nextQuestion() {
 		if (questionCounter < questions.length) {
 		//create a new question object
-		currentQuestion = new question (
 		questions[questionCounter].question,
 		questions[questionCounter].answers.length,
 		questions[questionCounter].number,
 		questions[questionCounter].correctAnswer
 		);
-		//increment the question counter
 		questionCounter++;
 		//update the question counter on footer
 		$(".questionNum").text(questionCounter);
+			//increment the question counter
+			questionCounter++;
+			$(".questionNum").text(questionCounter);
 		}
 		//when there are no more questions show finished screen
 		else {
 			$(".finished").delay(800).show(400, function() {
-				$(".question, .answers").hide();
+				$(".question, .answers, footer").hide();
 			});
 		};
 	};
